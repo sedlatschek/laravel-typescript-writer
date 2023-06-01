@@ -53,3 +53,30 @@ it('writes valid typescript', function () {
         $this->getOutput(),
     );
 });
+
+it('applies indentation config', function () {
+    config()->set('typescript-writer.indentation', 4);
+
+    LaravelTypescriptWriter::write(new TypescriptFile($this->output, [
+        new TypescriptData('Array<Test>', 'test', [
+            [
+                'flags' => [
+                    'active' => true,
+                    'hidden' => false,
+                ],
+            ],
+        ]),
+    ]));
+
+    $this->assertEquals(
+        "export const test: Array<Test> = [
+    {
+        flags: {
+            active: true,
+            hidden: false
+        }
+    }
+];",
+        $this->getOutput(),
+    );
+});
