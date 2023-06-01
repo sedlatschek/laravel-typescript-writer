@@ -40,11 +40,19 @@ class TestCase extends Orchestra
      */
     protected function getOutput(): string
     {
-        return str_replace(
+        $content = str_replace(
             TypescriptFile::getHeader(),
             '',
             file_get_contents($this->output)
         );
+
+        $content = str_replace(
+            "\r\n",
+            "\n",
+            $content,
+        );
+
+        return $content;
     }
 
     protected function getPackageProviders($app)
