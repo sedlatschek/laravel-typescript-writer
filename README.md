@@ -5,32 +5,31 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/sedlatschek/laravel-typescript-writer/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/sedlatschek/laravel-typescript-writer/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/sedlatschek/laravel-typescript-writer.svg?style=flat-square)](https://packagist.org/packages/sedlatschek/laravel-typescript-writer)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+Write typescript data out of laravel. Does not generate interfaces. Eg.:
 
-## Support us
+```php
+$simon = [
+    'name' => 'Simon'
+]
+```
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-typescript-writer.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-typescript-writer)
+will turn into
 
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+```typescript
+export const simon: Person = {
+    name: "Simon"
+}
+```
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require sedlatschek/laravel-typescript-writer
+composer require --dev sedlatschek/laravel-typescript-writer
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="laravel-typescript-writer-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
+You should publish the config file with:
 
 ```bash
 php artisan vendor:publish --tag="laravel-typescript-writer-config"
@@ -40,20 +39,38 @@ This is the contents of the published config file:
 
 ```php
 return [
+    // The typescript file indentation
+    'indentation' => 2,
+
+    // The end-of-line character
+    'eol_char' => PHP_EOL,
+
+    // The files that should be written
+    'files' => [
+        /*
+        new TypescriptFile(__DIR__.'/example.ts', [
+            // The contents of the file
+            new TypescriptData('Array<Test>', 'test', [
+                [
+                    'id' => 33,
+                    'name' => 'test',
+                    'active' => true,
+                    'languages' => [
+                        'German',
+                        'English',
+                    ],
+                ],
+            ]),
+        ]),
+        */
+    ],
 ];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-typescript-writer-views"
 ```
 
 ## Usage
 
-```php
-$laravelTypescriptWriter = new Sedlatschek\LaravelTypescriptWriter();
-echo $laravelTypescriptWriter->echoPhrase('Hello, Sedlatschek!');
+```sh
+php artisan typescript-writer
 ```
 
 ## Testing
@@ -65,10 +82,6 @@ composer test
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security Vulnerabilities
 

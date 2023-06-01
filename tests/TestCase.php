@@ -2,18 +2,48 @@
 
 namespace Sedlatschek\LaravelTypescriptWriter\Tests;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Sedlatschek\LaravelTypescriptWriter\LaravelTypescriptWriterServiceProvider;
+use Sedlatschek\LaravelTypescriptWriter\TypescriptFile;
 
 class TestCase extends Orchestra
 {
+    /**
+     * The temporary file to write outputs to.
+     */
+    protected string $output;
+
+    /**
+     * Setup the test environment.
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Sedlatschek\\LaravelTypescriptWriter\\Database\\Factories\\'.class_basename($modelName).'Factory'
+        $this->output = @tempnam('/tmp', 'test.ts');
+    }
+
+    /**
+     * Clean up the testing environment before the next test.
+     */
+    protected function tearDown(): void
+    {
+        if (file_exists($this->output)) {
+            unlink($this->output);
+        }
+
+        parent::tearDown();
+    }
+
+    /**
+     * Get the output contents with file headers.
+     */
+    protected function getOutput(): string
+    {
+        return str_replace(
+            TypescriptFile::getHeader(),
+            '',
+            file_get_contents($this->output)
         );
     }
 
@@ -27,10 +57,6 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
-
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_laravel-typescript-writer_table.php.stub';
-        $migration->up();
-        */
+        config()->set('typescript-writer.eol_char', "\n");
     }
 }

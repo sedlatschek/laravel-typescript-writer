@@ -2,9 +2,9 @@
 
 namespace Sedlatschek\LaravelTypescriptWriter;
 
+use Sedlatschek\LaravelTypescriptWriter\Commands\LaravelTypescriptWriterCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Sedlatschek\LaravelTypescriptWriter\Commands\LaravelTypescriptWriterCommand;
 
 class LaravelTypescriptWriterServiceProvider extends PackageServiceProvider
 {
