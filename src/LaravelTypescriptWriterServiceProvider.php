@@ -17,7 +17,7 @@ class LaravelTypescriptWriterServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('laravel-typescript-writer')
-            ->hasConfigFile()
+            ->hasConfigFile('typescript-writer')
             ->hasCommand(LaravelTypescriptWriterCommand::class);
     }
 }
