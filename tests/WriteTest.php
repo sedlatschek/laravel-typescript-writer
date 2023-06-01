@@ -77,6 +77,21 @@ it('applies indentation config', function () {
 ];');
 });
 
+it('applies single quote config', function () {
+    config()->set('typescript-writer.single_quote', true);
+
+    LaravelTypescriptWriter::write(new TypescriptFile($this->output, [
+        new TypescriptData('Object', 'test', [
+            'foo' => 'bar',
+        ]),
+    ]));
+
+    $this->assertOutput(
+        'export const test: Object = {
+  foo: \'bar\'
+};');
+});
+
 it('supports value replacement', function () {
     LaravelTypescriptWriter::write(new TypescriptFile($this->output, [
         new TypescriptData('Array<Test>', 'test', [

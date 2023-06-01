@@ -45,10 +45,26 @@ class TypescriptData
     }
 
     /**
+     * Get the quote character
+     */
+    private function quote(): string
+    {
+        if (config('typescript-writer.single_quote', true)) {
+            return "'";
+        }
+
+        return '"';
+    }
+
+    /**
      * Wrap a given string in quotes.
      */
-    private function wrap(string $value, string $char = '"'): string
+    private function wrap(string $value, string|null $char = null): string
     {
+        $char = isset($char)
+            ? $char
+            : $this->quote();
+
         return "$char{$value}$char";
     }
 

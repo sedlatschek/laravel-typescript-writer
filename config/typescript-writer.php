@@ -15,6 +15,9 @@ return [
     // The end-of-line character
     'eol_char' => PHP_EOL,
 
+    // Whether to use single or double quotes for strings
+    'single_quote' => false,
+
     // The files that should be written
     'files' => [
         /*
