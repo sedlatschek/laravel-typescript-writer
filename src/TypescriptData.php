@@ -39,7 +39,7 @@ class TypescriptData
     /**
      * The end of line character.
      */
-    private function eol(): string
+    private static function eol(): string
     {
         return config('typescript-writer.eol_char', PHP_EOL);
     }
@@ -114,19 +114,19 @@ class TypescriptData
         if (is_array($data)) {
             // list array
             if (array_is_list($data)) {
-                return $this->indent($level, $indent).'['.$this->eol()
+                return $this->indent($level, $indent).'['.self::eol()
                     .collect($data)
                         ->map(fn ($d) => $this->indent($level + 1).$this->write($d, $propKey, $level + 1, false))
-                        ->join(','.$this->eol(), ','.$this->eol()).
-                    $this->eol().$this->indent($level).']';
+                        ->join(','.self::eol(), ','.self::eol()).
+                    self::eol().$this->indent($level).']';
             }
 
             // assoc array
-            return $this->indent($level, $indent).'{'.$this->eol()
+            return $this->indent($level, $indent).'{'.self::eol()
                 .collect($data)
                     ->map(fn ($value, string $key) => $this->indent($level + 1).$this->writeKey($key).': '.$this->write($value, isset($propKey) ? "$propKey.$key" : $key, $level + 1, false))
-                    ->join(','.$this->eol(), ','.$this->eol()).
-                $this->eol().$this->indent($level).'}';
+                    ->join(','.self::eol(), ','.self::eol()).
+                self::eol().$this->indent($level).'}';
         }
 
         throw new RuntimeException('Type of data is not implemented');

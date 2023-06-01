@@ -6,10 +6,12 @@ class TypescriptFile
 {
     /**
      * @param  TypescriptData[]  $data
+     * @param  string  $typescript Typescript code that is placed above the generated data.
      */
     public function __construct(
         public string $path,
         public array $data,
+        public string $typescript = '',
     ) {
     }
 
@@ -25,7 +27,15 @@ class TypescriptFile
 * Changes to this file will be lost when the command is run again
 *
 * See https://github.com/sedlatschek/laravel-typescript-writer
-*/".str_repeat(config('typescript-writer.eol_char', PHP_EOL), 2);
+*/".str_repeat(self::eol(), 2);
+    }
+
+    /**
+     * The end of line character.
+     */
+    private static function eol(): string
+    {
+        return config('typescript-writer.eol_char', PHP_EOL);
     }
 
     /**
@@ -34,6 +44,7 @@ class TypescriptFile
     public function toTypescript(): string
     {
         return static::getHeader()
-            .collect($this->data)->map(fn ($d) => $d->toTypescript())->join(config('typescript-writer.eol_char', PHP_EOL));
+            .$this->typescript
+            .collect($this->data)->map(fn ($d) => $d->toTypescript())->join(self::eol());
     }
 }
