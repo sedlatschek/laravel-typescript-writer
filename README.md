@@ -1,4 +1,4 @@
-# This is my package laravel-typescript-writer
+# laravel-typescript-writer
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/sedlatschek/laravel-typescript-writer.svg?style=flat-square)](https://packagist.org/packages/sedlatschek/laravel-typescript-writer)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/sedlatschek/laravel-typescript-writer/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/sedlatschek/laravel-typescript-writer/actions?query=workflow%3Arun-tests+branch%3Amain)
