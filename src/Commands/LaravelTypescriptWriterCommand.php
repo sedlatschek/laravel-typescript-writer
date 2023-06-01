@@ -3,6 +3,7 @@
 namespace Sedlatschek\LaravelTypescriptWriter\Commands;
 
 use Illuminate\Console\Command;
+use Sedlatschek\LaravelTypescriptWriter\LaravelTypescriptWriter;
 
 class LaravelTypescriptWriterCommand extends Command
 {
@@ -12,7 +13,13 @@ class LaravelTypescriptWriterCommand extends Command
 
     public function handle(): int
     {
-        $this->comment('All done');
+        $files = config('typescript-writer.files', []);
+
+        foreach ($files as $file) {
+            LaravelTypescriptWriter::write($file);
+        }
+
+        $this->comment('TypeScript data generated successfully');
 
         return self::SUCCESS;
     }

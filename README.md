@@ -32,7 +32,7 @@ composer require --dev sedlatschek/laravel-typescript-writer
 You should publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-typescript-writer-config"
+php artisan vendor:publish --tag="typescript-writer-config"
 ```
 
 This is the contents of the published config file:
