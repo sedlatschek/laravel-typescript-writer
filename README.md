@@ -67,6 +67,54 @@ return [
 ];
 ```
 
+## Configuration
+
+### Value Replacements
+
+You can replace given values with hardcoded strings. This can be useful if you have an enum that can be matched with the output values.
+
+```php
+new TypescriptData(
+    'Array<Test>',
+    'test',
+    // the data
+    [
+        [
+            'test' => [
+                'flags' => [
+                    1,
+                    2,
+                    3,
+                ],
+            ],
+        ],
+    ],
+    // the configured replacements
+    [
+        '*.test.flags' => [
+            1 => 'SomeEnum.ABC',
+            2 => 'SomeEnum.DEF',
+            3 => 'SomeEnum.GHJ',
+        ],
+    ]),
+```
+
+will output
+
+```typescript
+export const test: Array<Test> = [
+  {
+    test: {
+      flags: [
+        SomeEnum.ABC,
+        SomeEnum.DEF,
+        SomeEnum.GHJ
+      ]
+    }
+  }
+];
+```
+
 ## Usage
 
 ```sh

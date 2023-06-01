@@ -26,7 +26,7 @@ it('writes valid typescript', function () {
         ]),
     ]));
 
-    $this->assertEquals(
+    $this->assertOutput(
         "export const test: Array<Test> = [
   {
     id: 33,
@@ -49,9 +49,7 @@ it('writes valid typescript', function () {
   {
     asdf: true
   }
-];",
-        $this->getOutput(),
-    );
+];");
 });
 
 it('applies indentation config', function () {
@@ -68,15 +66,49 @@ it('applies indentation config', function () {
         ]),
     ]));
 
-    $this->assertEquals(
-        "export const test: Array<Test> = [
+    $this->assertOutput(
+        'export const test: Array<Test> = [
     {
         flags: {
             active: true,
             hidden: false
         }
     }
-];",
-        $this->getOutput(),
-    );
+];');
+});
+
+it('supports value replacement', function () {
+    LaravelTypescriptWriter::write(new TypescriptFile($this->output, [
+        new TypescriptData('Array<Test>', 'test', [
+            [
+                'test' => [
+                    'flags' => [
+                        1,
+                        2,
+                        3,
+                    ],
+                ],
+            ],
+        ],
+            [
+                '*.test.flags' => [
+                    1 => 'SomeEnum.ABC',
+                    2 => 'SomeEnum.DEF',
+                    3 => 'SomeEnum.GHJ',
+                ],
+            ]),
+    ]));
+
+    $this->assertOutput(
+        'export const test: Array<Test> = [
+  {
+    test: {
+      flags: [
+        SomeEnum.ABC,
+        SomeEnum.DEF,
+        SomeEnum.GHJ
+      ]
+    }
+  }
+];');
 });

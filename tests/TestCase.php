@@ -21,6 +21,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         $this->output = @tempnam('/tmp', 'test.ts');
+        // $this->output = __DIR__.'/test.ts';
     }
 
     /**
@@ -53,6 +54,18 @@ class TestCase extends Orchestra
         );
 
         return $content;
+    }
+
+    /**
+     * Assert that to output matches the expectation.
+     */
+    protected function assertOutput(string $expectedContent): void
+    {
+        $this->assertEquals(
+            $expectedContent,
+            $this->getOutput(),
+            'The expected file output did not match the actual output',
+        );
     }
 
     protected function getPackageProviders($app)

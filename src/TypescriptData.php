@@ -3,6 +3,7 @@
 namespace Sedlatschek\LaravelTypescriptWriter;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use RuntimeException;
 
 class TypescriptData
@@ -11,6 +12,7 @@ class TypescriptData
         public string $class,
         public string $name,
         public $data,
+        public array $valueReplacements = [],
     ) {
     }
 
@@ -51,9 +53,25 @@ class TypescriptData
     }
 
     /**
+     * Replace a given value with preconfigured replacements.
+     */
+    private function replaceValue(string|null $key, $value)
+    {
+        foreach ($this->valueReplacements as $repKey => $repValues) {
+            if (Str::is($repKey, $key)) {
+                if (is_array($repValues) && array_key_exists($value, $repValues)) {
+                    return $repValues[$value];
+                }
+            }
+        }
+
+        return $value;
+    }
+
+    /**
      * Write the given object key.
      */
-    private function writeKey(string $key)
+    private function writeKey(string $key): string
     {
         if (str_contains($key, '-')) {
             return $this->wrap($key, "'");
@@ -67,30 +85,30 @@ class TypescriptData
      *
      * @throws \RuntimeException
      */
-    private function write($data, $level = 0, $indent = true): string|int|float
+    private function write($data, string|null $propKey = null, $level = 0, $indent = true): string|int|float
     {
         if (is_string($data)) {
-            return $this->wrap($data);
+            return $this->wrap($this->replaceValue($propKey, $data));
         }
 
         if (is_int($data) || is_float($data)) {
-            return $data;
+            return $this->replaceValue($propKey, $data);
         }
 
         if (is_bool($data)) {
-            return $data ? 'true' : 'false';
+            return $this->replaceValue($propKey, $data ? 'true' : 'false');
         }
 
         if (is_null($data)) {
-            return 'null';
+            return $this->replaceValue($propKey, 'null');
         }
 
         if (is_a($data, Collection::class)) {
-            return $this->write($data->toArray(), $level, $indent);
+            return $this->write($data->toArray(), $propKey, $level, $indent);
         }
 
         if (is_object($data)) {
-            return $this->write((array) $data, $level, $indent);
+            return $this->write((array) $data, $propKey, $level, $indent);
         }
 
         if (is_array($data)) {
@@ -98,7 +116,7 @@ class TypescriptData
             if (array_is_list($data)) {
                 return $this->indent($level, $indent).'['.$this->eol()
                     .collect($data)
-                        ->map(fn ($d) => $this->indent($level + 1).$this->write($d, $level + 1, false))
+                        ->map(fn ($d) => $this->indent($level + 1).$this->write($d, $propKey, $level + 1, false))
                         ->join(','.$this->eol(), ','.$this->eol()).
                     $this->eol().$this->indent($level).']';
             }
@@ -106,7 +124,7 @@ class TypescriptData
             // assoc array
             return $this->indent($level, $indent).'{'.$this->eol()
                 .collect($data)
-                    ->map(fn ($value, string $key) => $this->indent($level + 1).$this->writeKey($key).': '.$this->write($value, $level + 1, false))
+                    ->map(fn ($value, string $key) => $this->indent($level + 1).$this->writeKey($key).': '.$this->write($value, isset($propKey) ? "$propKey.$key" : $key, $level + 1, false))
                     ->join(','.$this->eol(), ','.$this->eol()).
                 $this->eol().$this->indent($level).'}';
         }
