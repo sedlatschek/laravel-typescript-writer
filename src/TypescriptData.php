@@ -8,6 +8,16 @@ use RuntimeException;
 
 class TypescriptData
 {
+    public static function __set_state(array $state)
+    {
+        return new TypescriptData(
+            $state['class'],
+            $state['name'],
+            $state['data'],
+            $state['valueReplacements'] ?? [],
+        );
+    }
+
     public function __construct(
         public string $class,
         public string $name,

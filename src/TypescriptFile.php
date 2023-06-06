@@ -4,6 +4,15 @@ namespace Sedlatschek\LaravelTypescriptWriter;
 
 class TypescriptFile
 {
+    public static function __set_state(array $state)
+    {
+        return new TypescriptFile(
+            $state['path'],
+            $state['data'],
+            $state['typescript'] ?? '',
+        );
+    }
+
     /**
      * @param  TypescriptData[]  $data
      * @param  string  $typescript Typescript code that is placed above the generated data.
