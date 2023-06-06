@@ -31,12 +31,12 @@ class TypescriptFile
     {
         return
 "/**
-* This file is auto generated using 'php artisan typescript-writer'
-*
-* Changes to this file will be lost when the command is run again
-*
-* See https://github.com/sedlatschek/laravel-typescript-writer
-*/".str_repeat(self::eol(), 2);
+ * This file is auto generated using 'php artisan typescript-writer'
+ *
+ * Changes to this file will be lost when the command is run again
+ *
+ * See https://github.com/sedlatschek/laravel-typescript-writer
+ */".str_repeat(self::eol(), 2);
     }
 
     /**
