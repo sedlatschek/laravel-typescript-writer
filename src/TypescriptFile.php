@@ -54,6 +54,6 @@ class TypescriptFile
     {
         return static::getHeader()
             .$this->typescript
-            .collect($this->data)->map(fn ($d) => $d->toTypescript())->join(self::eol());
+            .collect($this->data)->map(fn ($d) => $d->toTypescript())->join(self::eol().self::eol());
     }
 }
