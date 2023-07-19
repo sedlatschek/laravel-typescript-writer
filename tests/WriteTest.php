@@ -2,9 +2,10 @@
 
 use Sedlatschek\LaravelTypescriptWriter\LaravelTypescriptWriter;
 use Sedlatschek\LaravelTypescriptWriter\TypescriptData;
+use Sedlatschek\LaravelTypescriptWriter\TypescriptEnum;
 use Sedlatschek\LaravelTypescriptWriter\TypescriptFile;
 
-it('writes valid typescript', function () {
+it('writes valid typescript data', function () {
     LaravelTypescriptWriter::write(new TypescriptFile($this->output, [
         new TypescriptData('Array<Test>', 'test', [
             [
@@ -126,4 +127,43 @@ it('supports value replacement', function () {
     }
   }
 ];');
+});
+
+it('writes valid typescript enums', function () {
+    LaravelTypescriptWriter::write(new TypescriptFile($this->output, [
+        new TypescriptEnum('UserRole', [
+            'Regular' => 1,
+            'Analyst' => 2,
+            'Admin' => 3,
+        ]),
+        new TypescriptEnum('UserRole2', [
+            'Regular' => 'reg',
+            'Analyst' => 'ana',
+            'Admin' => 'adm',
+        ]),
+        new TypescriptEnum('UserRole3', [
+            'Regular' => 1,
+            'Analyst-OU' => 2,
+            'Admin OU' => 3,
+        ]),
+    ]));
+
+    $this->assertOutput(
+        'export const enum UserRole {
+  Regular = 1,
+  Analyst = 2,
+  Admin = 3,
+}
+
+export const enum UserRole2 {
+  Regular = "reg",
+  Analyst = "ana",
+  Admin = "adm",
+}
+
+export const enum UserRole3 {
+  Regular = 1,
+  \'Analyst-OU\' = 2,
+  \'Admin OU\' = 3,
+}');
 });

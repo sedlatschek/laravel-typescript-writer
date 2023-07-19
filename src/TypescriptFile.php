@@ -4,6 +4,8 @@ namespace Sedlatschek\LaravelTypescriptWriter;
 
 class TypescriptFile
 {
+    use WritesTypescript;
+
     public static function __set_state(array $state)
     {
         return new TypescriptFile(
@@ -14,8 +16,8 @@ class TypescriptFile
     }
 
     /**
-     * @param  TypescriptData[]  $data
      * @param  string  $typescript Typescript code that is placed above the generated data.
+     * @param  array  $data Array of TypescriptData and TypescriptEnum objects.
      */
     public function __construct(
         public string $path,
@@ -40,20 +42,16 @@ class TypescriptFile
     }
 
     /**
-     * The end of line character.
-     */
-    private static function eol(): string
-    {
-        return config('typescript-writer.eol_char', PHP_EOL);
-    }
-
-    /**
      * Convert file to typescript.
      */
     public function toTypescript(): string
     {
+        $prepend = empty($this->typescript)
+            ? ''
+            : $this->typescript.self::eol().self::eol();
+
         return static::getHeader()
-            .$this->typescript
+            .$prepend
             .collect($this->data)->map(fn ($d) => $d->toTypescript())->join(self::eol().self::eol());
     }
 }

@@ -4,7 +4,9 @@
     "keywords": [
         "sedlatschek",
         "laravel",
-        "laravel-typescript-writer"
+        "laravel-typescript-writer",
+        "typescript",
+        "ts"
     ],
     "homepage": "https://github.com/sedlatschek/laravel-typescript-writer",
     "license": "MIT",
