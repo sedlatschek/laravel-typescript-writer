@@ -39,7 +39,7 @@ trait WritesTypescript
     /**
      * Wrap a given string in quotes.
      */
-    private function wrap(string $value, string|null $char = null): string
+    private function wrap(string $value, string $char = null): string
     {
         $char = isset($char)
             ? $char
