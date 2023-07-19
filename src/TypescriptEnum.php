@@ -46,7 +46,7 @@ class TypescriptEnum
     {
         return collect($this->data)
             ->mapWithKeys(function ($v, $k) {
-                return [$v => $this->name . '.'.$k];
+                return [$v => $this->name.'.'.$k];
             })->toArray();
     }
 }
