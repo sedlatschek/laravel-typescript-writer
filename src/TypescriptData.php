@@ -39,7 +39,7 @@ class TypescriptData
     /**
      * Replace a given value with preconfigured replacements.
      */
-    private function replaceValue(string|null $key, $value)
+    private function replaceValue(?string $key, $value)
     {
         foreach ($this->valueReplacements as $repKey => $repValues) {
             if (Str::is($repKey, $key)) {
@@ -57,7 +57,7 @@ class TypescriptData
      *
      * @throws \RuntimeException
      */
-    private function write($data, string|null $propKey = null, $level = 0, $indent = true): string|int|float
+    private function write($data, string $propKey = null, $level = 0, $indent = true): string|int|float
     {
         if (is_string($data)) {
             return $this->wrap($this->replaceValue($propKey, $data));
