@@ -38,4 +38,15 @@ class TypescriptEnum
             })->join(','.self::eol())
             .','.self::eol().'}';
     }
+
+    /**
+     * Get an array that can be used as replacement values for TypescriptData.
+     */
+    public function asReplacementValues(): array
+    {
+        return collect($this->data)
+            ->mapWithKeys(function ($v, $k) {
+                return [$v => $this->name . '.'.$k];
+            })->toArray();
+    }
 }

@@ -167,3 +167,48 @@ export const enum UserRole3 {
   \'Admin OU\' = 3,
 }');
 });
+
+it('supports value replacement with enums', function () {
+    $enum = new TypescriptEnum('SomeEnum', [
+        'ABC' => 1,
+        'DEF' => 2,
+        'GHI' => 3,
+    ]);
+
+    LaravelTypescriptWriter::write(new TypescriptFile($this->output, [
+        $enum,
+        new TypescriptData('Array<Test>', 'test', [
+            [
+                'test' => [
+                    'flags' => [
+                        1,
+                        2,
+                        3,
+                    ],
+                ],
+            ],
+        ],
+            [
+                '*.test.flags' => $enum->asReplacementValues(),
+            ]),
+    ]));
+
+    $this->assertOutput(
+        'export const enum SomeEnum {
+  ABC = 1,
+  DEF = 2,
+  GHI = 3,
+}
+
+export const test: Array<Test> = [
+  {
+    test: {
+      flags: [
+        SomeEnum.ABC,
+        SomeEnum.DEF,
+        SomeEnum.GHI
+      ]
+    }
+  }
+];');
+});
